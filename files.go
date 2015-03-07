@@ -10,6 +10,11 @@ import (
 	"path"
 )
 
+const (
+	GOOGLE_DRIVE Provider = iota
+	DROPBOX
+)
+
 type Provider int
 
 func (p Provider) String() string {
@@ -23,14 +28,16 @@ func (p Provider) String() string {
 	}
 }
 
-const (
-	GOOGLE_DRIVE Provider = iota
-	DROPBOX
-)
-
 // Folders defines all methods to access/manipulate the Folders endpoint
 type Folders struct {
 	client *Client
+}
+
+// NewFolders returns a folders object to manipulate the Docuemnts endpoints
+func NewFolders(c *Client) *Folders {
+	return &Folders{
+		client: c,
+	}
 }
 
 // Files is a slice of File
