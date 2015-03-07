@@ -1,6 +1,7 @@
 package cloudElements
 
 import (
+	"io"
 	"net/http"
 	"net/url"
 )
@@ -17,9 +18,9 @@ type request struct {
 	headers map[string]string
 }
 
-func (r *request) do() (*http.Response, error) {
+func (r *request) do(method string, body io.Reader) (*http.Response, error) {
 	client := http.Client{}
-	req, _ := http.NewRequest("GET", r.u.String(), nil)
+	req, _ := http.NewRequest(method, r.u.String(), body)
 	for k, v := range r.headers {
 		req.Header.Set(k, v)
 	}
