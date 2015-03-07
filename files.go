@@ -132,16 +132,16 @@ func (f Folders) CreateFolder(folderPath string, provider Provider) (*File, *Err
 // CreateFile will create a file
 func (f Folders) CreateFile(fileInfo File, overwrite bool, reader io.ReadCloser, provider Provider) (*File, *Error) {
 	defer reader.Close()
-	filePath := path.Join("/", fileInfo.Path, fileInfo.Name)
+	filePath := path.Join("/", fileInfo.Path)
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	part, err := writer.CreateFormFile("file", filePath)
+	part, err := writer.CreateFormFile("file", fileInfo.Name)
 	if err != nil {
 		return nil, &Error{Message: err.Error()}
 	}
 	_, err = io.Copy(part, reader)
-	writer.WriteField("path", filePath)
+
 	err = writer.Close()
 	if err != nil {
 		return nil, &Error{Message: err.Error()}
@@ -158,7 +158,7 @@ func (f Folders) CreateFile(fileInfo File, overwrite bool, reader io.ReadCloser,
 
 	headers := map[string]string{}
 	headers["Authorization"] = f.client.credentials.Authorization(provider)
-	headers["Content-Type"] = "multipart/form-data"
+	headers["Content-Type"] = writer.FormDataContentType()
 
 	req := newRequest(u, headers)
 
