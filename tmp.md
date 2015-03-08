@@ -1,12 +1,7 @@
 # cloudElements
-
 --
     import "github.com/corylanou/cloud-elements"
 
-
-This library is intended to be used by the Cloud Elements API.
-
-Currently work on progress.
 
 ## Usage
 
@@ -154,4 +149,3 @@ const (
 ```go
 func (p Provider) String() string
 ```
-
